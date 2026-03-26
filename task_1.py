@@ -32,4 +32,3 @@ for url in urls:
     except requests.exceptions.RequestException as error:
         print(f'{url} – ошибка - {error}')
 
-
