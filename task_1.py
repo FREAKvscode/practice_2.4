@@ -40,7 +40,7 @@ root.title("Проверка статуса URL")
 root.geometry("600x400")
 
 check_button = ttk.Button(root, text="Проверить URL", command=check_urls)
-check_button.pack(pady=10)
+check_button.pack(pady=10, ipady=5, ipadx=5)
 
 result_text = scrolledtext.ScrolledText(root, width=80, height=20)
 result_text.pack(padx=10, pady=10)

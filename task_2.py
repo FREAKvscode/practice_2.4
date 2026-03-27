@@ -45,25 +45,25 @@ def stop_auto_update():
 
 root = tk.Tk()
 root.title('Системный монитор')
-root.geometry('600x400')
+root.geometry('800x600')
 
 check_button_cpu = ttk.Button(root, text='Мониторинг загрузки CPU', command=get_cpu_usage)
-check_button_cpu.pack(padx=10, pady=5, anchor='center')
+check_button_cpu.pack(padx=10, pady=5, anchor='center', ipady=5, ipadx=5)
 
 check_button_memory = ttk.Button(root, text='Мониторинг использованной оперативной памяти', command=get_memory_usage)
-check_button_memory.pack(padx=10, pady=5, anchor='center')
+check_button_memory.pack(padx=10, pady=5, anchor='center', ipady=5, ipadx=5)
 
 check_button_disk = ttk.Button(root, text='Процентное соотношение загруженности диска', command=get_disk_usage)
-check_button_disk.pack(padx=10, pady=5, anchor='center')
+check_button_disk.pack(padx=10, pady=5, anchor='center', ipady=5, ipadx=5)
 
 check_button_all = ttk.Button(root, text='Автоматическое обновление', command=all_usage)
-check_button_all.pack(padx=10, pady=5, anchor='center')
+check_button_all.pack(padx=10, pady=5, anchor='center', ipady=5, ipadx=5)
 
 check_button_stop = ttk.Button(root, text='Остановить автоматическое обновление', command=stop_auto_update)
-check_button_stop.pack(padx=10, pady=5, anchor='center')
+check_button_stop.pack(padx=10, pady=5, anchor='center', ipady=5, ipadx=5)
 check_button_stop.config(state='disabled')
 
-result_text = scrolledtext.ScrolledText(root, width=80, height=20)
+result_text = scrolledtext.ScrolledText(root, width=100, height=20)
 result_text.pack(padx=10, pady=10)
 
 root.mainloop()
