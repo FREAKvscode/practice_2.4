@@ -173,7 +173,7 @@ def main():
     search_entry.pack(side=tk.LEFT, padx=5)
 
     search_repository = ttk.Button(search_frame, text="Поиск репозиториев", command=on_search)
-    search_repository.pack(side=tk.LEFT, padx=5, ipady=5, ipadx=5)
+    search_repository.pack(side=tk.LEFT, padx=5)
 
     display_text = tk.Text(root, wrap=tk.WORD)
     display_text.pack(padx=10, pady=10, fill=tk.BOTH, expand=True)
