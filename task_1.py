@@ -1,49 +1,67 @@
 import requests
 import tkinter as tk
-from tkinter import scrolledtext, ttk
+from tkinter import messagebox, ttk
+from io import BytesIO
+from PIL import Image, ImageTk
 
-urls = [
-    'https://github.com/',
-    'https://www.binance.com/en',
-    'https://tomtit.tomsk.ru/',
-    'https://jsonplaceholder.typicode.com/',
-    'https://moodle.tomtit-tomsk.ru/'
-]
+api_key = '9c6d9545427ecb4adbcaee4dad0da408'
 
-def check_urls():
-    result_text.delete('1.0', tk.END)
-    for url in urls:
-        try:
-            response = requests.get(url, timeout=20)
-            status_code = response.status_code
+def get_weather(city):
+    url = f"http://api.openweathermap.org/data/2.5/weather?q={city}&appid={api_key}&units=metric"
+    response = requests.get(url)
+    if response.status_code == 200:
+        return response.json()
+    else:
+        return None
 
-            if 200 <= status_code < 300:
-                status = 'успешно'
-            elif 300 <= status_code < 400:
-                status = 'перенаправление'
-            elif 400 <= status_code < 500:
-                status = 'ошибка клиента'
-            elif 500 <= status_code < 600:
-                status = 'ошибка сервера'
-            else:
-                status = 'неизвестный статус'
+def get_icon(icon_code):
+    url = f"http://openweathermap.org/img/wn/{icon_code}@2x.png"
+    response = requests.get(url)
+    if response.status_code == 200:
+        image_data = response.content
+        image = Image.open(BytesIO(image_data))
+        return ImageTk.PhotoImage(image)
+    return None
 
-            result_text.insert(tk.END, f'{url} – {status} – {status_code}\n')
+def show_weather():
+    city = city_entry.get()
+    data = get_weather(city)
+    if data:
+        temperature = data['main']['temp']
+        weather_icon_code = data['weather'][0]['icon']
+        icon_image = get_icon(weather_icon_code)
 
-        except requests.exceptions.Timeout:
-            result_text.insert(tk.END, f'{url} – нет ответа\n')
-        except requests.exceptions.RequestException as error:
-            result_text.insert(tk.END, f'{url} – ошибка - {error}\n')
+        temperature_label.config(text=f"Температура: {temperature}°C")
+        if icon_image:
+            weather_icon.config(image=icon_image)
+            weather_icon.image = icon_image
+        else:
+            weather_icon.config(image='')
+        city_label.config(text=f"Погода в {city}")
+    else:
+        messagebox.showerror("Ошибка", "Город не найден или произошла ошибка при запросе.")
+
 
 root = tk.Tk()
-root.title("Проверка статуса URL")
+root.title("Погода в городе")
 root.geometry("600x400")
 
-check_button = ttk.Button(root, text="Проверить URL", command=check_urls)
-check_button.pack(pady=10, ipady=5, ipadx=5)
+city_entry = ttk.Entry(root)
+city_entry.pack(pady=10)
+city_entry.insert(0, "Москва")
 
-result_text = scrolledtext.ScrolledText(root, width=80, height=20)
-result_text.pack(padx=10, pady=10)
+button = ttk.Button(root, text="Показать погоду", command=show_weather)
+button.pack(ipadx=5, ipady=5)
+
+city_label = ttk.Label(root, text="")
+city_label.pack()
+
+temperature_label = ttk.Label(root, text="")
+temperature_label.pack()
+
+weather_icon = ttk.Label(root)
+weather_icon.pack()
 
 root.mainloop()
+
 
